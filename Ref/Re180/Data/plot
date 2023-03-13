@@ -1,0 +1,32 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+graphName="OF_vs_ANALYTICAL.eps"
+
+echo "Creating graph of u+ vs y+ to $graphName"
+gnuplot<<EOF
+
+set terminal postscript eps color enhanced font "Arial, 20"
+set output "$graphName"
+set grid
+set key bottom right font "Arial, 15"
+set border 4095 linewidth 3
+    
+    set output "$graphName"
+    
+    set xlabel "y+"
+    set ylabel "u+"
+
+    set size 0.7, 0.6
+    set parametric
+    # u+ range
+    set xrange [0:1000]
+    set logscale x
+    set format x "10^{%T}"
+    plot "data0.csv" title "OpenFOAM" with points lc rgb "black" pt 6 ps 1.5,\
+        "literature" using 1:2 title "Komen et al" with lines lw 5 lc rgb "black"
+EOF
+
+echo Done
+
+#------------------------------------------------------------------------------
